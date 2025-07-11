@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Trades Evolution - Member Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 40px rgba(102, 126, 234, 0.4);
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.6), 0 0 40px rgba(102, 126, 234, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.8), 0 0 60px rgba(102, 126, 234, 0.6);
+            }
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-input.valid {
+            border-color: #27ae60;
+            background: #f0fdf4;
+        }
+
+        .form-input.invalid {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+
+        .input-hint {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .agent-section {
+            background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .agent-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .agent-title {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+            color: #2c3e50;
+            cursor: pointer;
+        }
+
+        .agent-benefits {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .benefit-icon {
+            font-size: 1.2rem;
+        }
+
+        .referral-section {
+            background: #f0fdf4;
+            border: 1px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .terms-text {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 25px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/Smalltradesevo/cost-cal/main/assets/images/newlogo.png" alt="Small Trades Evolution" class="logo">
+        </div>
+
+        <div class="form-header">
+            <h1 class="form-title">Join Small Trades Evolution</h1>
+            <p class="form-subtitle">Your gateway to financial freedom and unlimited referral opportunities</p>
+        </div>
+
+        <form id="memberRegistrationForm">
+            <!-- Personal Information -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">First Name <span class="required">*</span></label>
+                    <input type="text" id="firstName" name="firstName" class="form-input" placeholder="Enter your first name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Last Name <span class="required">*</span></label>
+                    <input type="text" id="lastName" name="lastName" class="form-input" placeholder="Enter your last name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mobile Phone <span class="required">*</span></label>
+                    <input type="tel" id="mobilePhone" name="mobilePhone" class="form-input" placeholder="555-222-1234" required>
+                    <div class="input-hint">This will be your unique referral code</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" required>
+                </div>
+            </div>
+
+            <!-- Trade Questions Section -->
+            <div class="agent-section">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="inTrades" name="inTrades" class="checkbox-input" onchange="toggleTradeQuestions()">
+                    <label for="inTrades" class="checkbox-label">I am in the trades/home services industry</label>
+                </div>
+
+                <div id="tradeQuestions" class="trade-questions">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Trade/Business <span class="required">*</span></label>
+                            <select id="tradeType" name="tradeType" class="form-select">
+                                <option value="">Select your trade</option>
+                                <option value="electrician">Electrician</option>
+                                <option value="plumber">Plumber</option>
+                                <option value="hvac">HVAC Technician</option>
+                                <option value="contractor">General Contractor</option>
+                                <option value="roofer">Roofer</option>
+                                <option value="painter">Painter</option>
+                                <option value="flooring">Flooring Specialist</option>
+                                <option value="landscaper">Landscaper</option>
+                                <option value="handyman">Handyman</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Years in Business</label>
+                            <select id="yearsInBusiness" name="yearsInBusiness" class="form-select">
+                                <option value="">Select experience</option>
+                                <option value="0-1">Less than 1 year</option>
+                                <option value="1-3">1-3 years</option>
+                                <option value="3-5">3-5 years</option>
+                                <option value="5-10">5-10 years</option>
+                                <option value="10+">10+ years</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group form-group-full">
+                            <label class="form-label">Business Address</label>
+                            <input type="text" id="businessAddress" name="businessAddress" class="form-input" placeholder="123 Main St, City, State, ZIP">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Code Section -->
+            <div class="referral-info" id="referralInfo" style="display: none;">
+                <div class="referral-method" id="referralMethod">You were referred by: <span id="referrerName"></span></div>
+                <div class="input-hint">This referral will be automatically credited to your account</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Referred By (Optional)</label>
+                <input type="tel" id="referredBy" name="referredBy" class="form-input" placeholder="Referrer's phone number or leave blank">
+                <div class="input-hint">Enter the phone number of the person who referred you, or leave blank if none</div>
+            </div>
+
+            <!-- Agent Interest Section -->
+            <div class="agent-section">
+                <div class="agent-header">
+                    <h3 class="agent-title">💰 Interested in Earning as a Referral Agent?</h3>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agentInterest" name="agentInterest" class="checkbox-input" onchange="toggleAgentBenefits()">
+                    <label for="agentInterest" class="checkbox-label">Yes! I want to learn about becoming a referral agent</label>
+                </div>
+
+                <div id="agentBenefits" class="agent-benefits">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">🎯 Agent Benefits:</h4>
+                    
+                    <div class="benefit-item">
+                        <span class="benefit-icon">💵</span>
+                        <span>Earn 1.00% - 2.25% commission on direct referrals</span>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🏆</span>
+                        <span>Elite agents earn 0.25% - 1.25% on downstream referrals</span>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <span class="benefit-icon">📈</span>
+                        <span>Real-time tracking with our "NOW" tool</span>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🏝️</span>
+                        <span>Win bucket list experiences: Vale villa, Rhode Island sailing, Moab biking</span>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🤝</span>
+                        <span>Weekly training calls and Q&A sessions</span>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🎲</span>
+                        <span>Weekly "Place Your Bets" competitions</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms and Submit -->
+            <div class="submit-section">
+                <div class="checkbox-group" style="justify-content: center; margin-bottom: 20px;">
+                    <input type="checkbox" id="termsAccepted" name="termsAccepted" class="checkbox-input" required>
+                    <label for="termsAccepted" class="checkbox-label">I agree to the Terms of Service and Privacy Policy</label>
+                </div>
+
+                <button type="submit" class="btn-submit">Join Small Trades Evolution</button>
+
+                <p class="terms-text">
+                    By registering, you agree to receive communications about Small Trades Evolution programs, 
+                    deals, and referral opportunities. You can unsubscribe at any time.
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // URL Parameter handling for referral codes
+        function getUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pathSegments = window.location.pathname.split('/');
+            
+            // Handle URL patterns like /register/johndoe or ?ref=5551234567
+            const referralCode = urlParams.get('ref') || urlParams.get('referral');
+            const pathReferral = pathSegments[pathSegments.length - 1];
+            
+            return {
+                referralCode: referralCode,
+                pathReferral: pathReferral !== 'register' ? pathReferral : null,
+                firstName: urlParams.get('fname'),
+                lastName: urlParams.get('lname'),
+                email: urlParams.get('email'),
+                phone: urlParams.get('phone')
+            };
+        }
+
+        // Pre-populate form from URL parameters
+        function prePopulateForm() {
+            const params = getUrlParameters();
+            
+            // Pre-fill form fields if data exists
+            if (params.firstName) {
+                document.getElementById('firstName').value = decodeURIComponent(params.firstName);
+            }
+            
+            if (params.lastName) {
+                document.getElementById('lastName').value = decodeURIComponent(params.lastName);
+            }
+            
+            if (params.email) {
+                document.getElementById('email').value = decodeURIComponent(params.email);
+            }
+            
+            if (params.phone) {
+                document.getElementById('mobilePhone').value = params.phone;
+            }
+            
+            // Handle referral codes
+            if (params.referralCode) {
+                document.getElementById('referredBy').value = params.referralCode;
+                showReferralInfo(params.referralCode);
+            } else if (params.pathReferral) {
+                // For URLs like /register/johndoe, lookup the agent's phone number
+                lookupAgentByName(params.pathReferral);
+            }
+        }
+
+        // Show referral information
+        function showReferralInfo(referralCode) {
+            const referralInfo = document.getElementById('referralInfo');
+            const referrerName = document.getElementById('referrerName');
+            
+            // Here you would lookup the referrer's name from your database
+            // For now, showing the referral code
+            referrerName.textContent = referralCode;
+            referralInfo.style.display = 'block';
+            
+            // Disable the manual input since it's auto-populated
+            const referralInput = document.getElementById('referredBy');
+            referralInput.value = referralCode;
+            referralInput.style.backgroundColor = '#e8f5e8';
+            referralInput.readOnly = true;
+        }
+
+        // Lookup agent by name (for /register/johndoe URLs)
+        function lookupAgentByName(agentName) {
+            // This would make an API call to your Lambda function to lookup agent
+            // For now, simulating the lookup
+            console.log('Looking up agent:', agentName);
+            
+            // Simulated response - replace with actual API call
+            const mockAgentData = {
+                'johndoe': '5551234567',
+                'janedoe': '5559876543'
+            };
+            
+            const agentPhone = mockAgentData[agentName.toLowerCase()];
+            if (agentPhone) {
+                showReferralInfo(agentPhone);
+            }
+        }
+
+        // Toggle trade questions visibility
+        function toggleTradeQuestions() {
+            const checkbox = document.getElementById('inTrades');
+            const tradeQuestions = document.getElementById('tradeQuestions');
+            const tradeTypeSelect = document.getElementById('tradeType');
+            
+            if (checkbox.checked) {
+                tradeQuestions.style.display = 'block';
+                tradeTypeSelect.required = true;
+            } else {
+                tradeQuestions.style.display = 'none';
+                tradeTypeSelect.required = false;
+                // Clear trade-related fields
+                document.getElementById('tradeType').value = '';
+                document.getElementById('yearsInBusiness').value = '';
+                document.getElementById('businessAddress').value = '';
+            }
+        }
+
+        function toggleAgentBenefits() {
+            const checkbox = document.getElementById('agentInterest');
+            const benefits = document.getElementById('agentBenefits');
+            
+            if (checkbox.checked) {
+                benefits.style.display = 'block';
+            } else {
+                benefits.style.display = 'none';
+            }
+        }
+
+        // Phone number formatting
+        function formatPhoneNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{0,3})/, '$1-$2');
+            }
+            input.value = value;
+        }
+
+        // Initialize form on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            prePopulateForm();
+            
+            // Phone number formatting
+            document.getElementById('mobilePhone').addEventListener('input', function(e) {
+                formatPhoneNumber(e.target);
+            });
+
+            document.getElementById('referredBy').addEventListener('input', function(e) {
+                if (!e.target.readOnly) {
+                    formatPhoneNumber(e.target);
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('memberRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Add member type based on agent interest
+            data.member_type = data.agentInterest ? 'referral_agent' : 'standard';
+            
+            // Clean phone numbers (remove dashes)
+            data.mobilePhone = data.mobilePhone.replace(/\D/g, '');
+            if (data.referredBy) {
+                data.referredBy = data.referredBy.replace(/\D/g, '');
+            }
+            
+            // Add referral tracking data
+            data.referral_source = getUrlParameters().pathReferral ? 'agent_link' : 
+                                  getUrlParameters().referralCode ? 'qr_code' : 'manual';
+            
+            console.log('Registration Data:', data);
+            
+            // Here you'll integrate with your AWS Lambda function
+            submitToAWS(data);
+        });
+
+        // AWS Lambda submission function
+        async function submitToAWS(data) {
+            try {
+                // Replace with your actual Lambda function URL
+                const response = await fetch('YOUR_LAMBDA_ENDPOINT', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    alert('Registration successful! Welcome to Small Trades Evolution!');
+                    // Redirect to welcome page or dashboard
+                    window.location.href = '/welcome';
+                } else {
+                    throw new Error('Registration failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Registration failed. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
