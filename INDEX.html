@@ -444,7 +444,8 @@
 
         // Go to dashboard
         function goToDashboard() {
-            window.location.href = 'https://gorgeous-biscochitos-840f0f.netlify.app';
+            // Clear any browser cache issues and force clean redirect
+            window.location.replace('https://gorgeous-biscochitos-840f0f.netlify.app/');
         }
 
         // Toggle trade questions
