@@ -282,7 +282,7 @@
                     <label for="inTrades" class="checkbox-label">I am in the trades/home services industry</label>
                 </div>
 
-                <div id="tradeQuestions" class="trade-questions">
+                <div id="tradeQuestions" class="trade-questions" style="display: none;">
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label">Trade/Business <span class="required">*</span></label>
@@ -578,9 +578,8 @@
                 });
                 
                 if (response.ok) {
-                    alert('Registration successful! Welcome to Small Trades Evolution!');
-                    // Redirect to welcome page or dashboard
-                    window.location.href = '/welcome';
+                    // Show success message and password setup reminder
+                    showPasswordSetupModal();
                 } else {
                     throw new Error('Registration failed');
                 }
@@ -588,6 +587,97 @@
                 console.error('Error:', error);
                 alert('Registration failed. Please try again.');
             }
+        }
+
+        // Function to show password setup modal
+        function showPasswordSetupModal() {
+            // Create modal HTML
+            const modalHTML = `
+                <div id="passwordModal" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                ">
+                    <div style="
+                        background: white;
+                        padding: 40px;
+                        border-radius: 20px;
+                        max-width: 500px;
+                        width: 90%;
+                        text-align: center;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                    ">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">🎉</div>
+                        <h2 style="
+                            color: #667eea;
+                            margin-bottom: 20px;
+                            font-size: 1.8rem;
+                        ">Welcome to Small Trades Evolution!</h2>
+                        
+                        <p style="
+                            color: #2c3e50;
+                            margin-bottom: 25px;
+                            font-size: 1.1rem;
+                            line-height: 1.5;
+                        ">Your registration was successful! You're now logged into your dashboard.</p>
+                        
+                        <div style="
+                            background: #fff3cd;
+                            border: 1px solid #ffeaa7;
+                            border-radius: 10px;
+                            padding: 20px;
+                            margin-bottom: 25px;
+                        ">
+                            <p style="
+                                color: #856404;
+                                font-weight: 600;
+                                margin-bottom: 10px;
+                            ">🔐 Security Notice</p>
+                            <p style="
+                                color: #856404;
+                                font-size: 0.95rem;
+                                line-height: 1.4;
+                            ">For your account security, please set up a password on your next login. You can also do this now by going to your <strong>Profile</strong> section in the dashboard.</p>
+                        </div>
+                        
+                        <button onclick="proceedToDashboard()" style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            border: none;
+                            padding: 15px 30px;
+                            border-radius: 10px;
+                            font-size: 1.1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                        " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                            Continue to Dashboard
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add modal to page
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        // Function to proceed to dashboard
+        function proceedToDashboard() {
+            // Remove the modal
+            const modal = document.getElementById('passwordModal');
+            if (modal) {
+                modal.remove();
+            }
+            
+            // Redirect to the referral agent dashboard
+            window.location.href = 'https://gorgeous-biscochitos-840f0f.netlify.app';
         }
     </script>
 </body>
