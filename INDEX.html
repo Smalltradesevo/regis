@@ -114,16 +114,6 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .form-input.valid {
-            border-color: #27ae60;
-            background: #f0fdf4;
-        }
-
-        .form-input.invalid {
-            border-color: #e74c3c;
-            background: #fdf2f2;
-        }
-
         .input-hint {
             font-size: 0.85rem;
             color: #7f8c8d;
@@ -188,14 +178,6 @@
             font-size: 1.2rem;
         }
 
-        .referral-section {
-            background: #f0fdf4;
-            border: 1px solid #27ae60;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
         .submit-section {
             text-align: center;
             margin-top: 40px;
@@ -236,6 +218,41 @@
                 padding: 25px;
                 margin: 10px;
             }
+        }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -278,14 +295,14 @@
             <!-- Trade Questions Section -->
             <div class="agent-section">
                 <div class="checkbox-group">
-                    <input type="checkbox" id="inTrades" name="inTrades" class="checkbox-input" onchange="toggleTradeQuestions()">
+                    <input type="checkbox" id="inTrades" name="inTrades" class="checkbox-input">
                     <label for="inTrades" class="checkbox-label">I am in the trades/home services industry</label>
                 </div>
 
                 <div id="tradeQuestions" class="trade-questions" style="display: none;">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label">Trade/Business <span class="required">*</span></label>
+                            <label class="form-label">Trade/Business</label>
                             <select id="tradeType" name="tradeType" class="form-select">
                                 <option value="">Select your trade</option>
                                 <option value="electrician">Electrician</option>
@@ -321,12 +338,6 @@
                 </div>
             </div>
 
-            <!-- Referral Code Section -->
-            <div class="referral-info" id="referralInfo" style="display: none;">
-                <div class="referral-method" id="referralMethod">You were referred by: <span id="referrerName"></span></div>
-                <div class="input-hint">This referral will be automatically credited to your account</div>
-            </div>
-
             <div class="form-group">
                 <label class="form-label">Referred By (Optional)</label>
                 <input type="tel" id="referredBy" name="referredBy" class="form-input" placeholder="Referrer's phone number or leave blank">
@@ -340,7 +351,7 @@
                 </div>
 
                 <div class="checkbox-group">
-                    <input type="checkbox" id="agentInterest" name="agentInterest" class="checkbox-input" onchange="toggleAgentBenefits()">
+                    <input type="checkbox" id="agentInterest" name="agentInterest" class="checkbox-input">
                     <label for="agentInterest" class="checkbox-label">Yes! I want to learn about becoming a referral agent</label>
                 </div>
 
@@ -396,289 +407,65 @@
         </form>
     </div>
 
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div style="font-size: 3rem; margin-bottom: 20px;">🎉</div>
+            <h2 style="color: #667eea; margin-bottom: 20px; font-size: 1.8rem;">Welcome to Small Trades Evolution!</h2>
+            <p style="color: #2c3e50; margin-bottom: 25px; font-size: 1.1rem; line-height: 1.5;">Your registration was successful! You're now logged into your dashboard.</p>
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 10px; padding: 20px; margin-bottom: 25px;">
+                <p style="color: #856404; font-weight: 600; margin-bottom: 10px;">🔐 Security Notice</p>
+                <p style="color: #856404; font-size: 0.95rem; line-height: 1.4;">For your account security, please set up a password on your next login. You can also do this now by going to your <strong>Profile</strong> section in the dashboard.</p>
+            </div>
+            <button onclick="goToDashboard()" class="modal-button">Continue to Dashboard</button>
+        </div>
+    </div>
+
     <script>
-        // URL Parameter handling for referral codes
-        function getUrlParameters() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const pathSegments = window.location.pathname.split('/');
+        // Simple form submission
+        document.getElementById('memberRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Handle URL patterns like /register/johndoe or ?ref=5551234567
-            const referralCode = urlParams.get('ref') || urlParams.get('referral');
-            const pathReferral = pathSegments[pathSegments.length - 1];
+            // Get form data
+            const formData = new FormData(this);
+            const data = {};
             
-            return {
-                referralCode: referralCode,
-                pathReferral: pathReferral !== 'register' ? pathReferral : null,
-                firstName: urlParams.get('fname'),
-                lastName: urlParams.get('lname'),
-                email: urlParams.get('email'),
-                phone: urlParams.get('phone')
-            };
+            // Convert FormData to object
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Log the data (this is what would go to your database)
+            console.log('Registration Data:', data);
+            
+            // Show success modal
+            document.getElementById('successModal').style.display = 'flex';
+        });
+
+        // Go to dashboard
+        function goToDashboard() {
+            window.location.href = 'https://gorgeous-biscochitos-840f0f.netlify.app';
         }
 
-        // Pre-populate form from URL parameters
-        function prePopulateForm() {
-            const params = getUrlParameters();
-            
-            // Pre-fill form fields if data exists
-            if (params.firstName) {
-                document.getElementById('firstName').value = decodeURIComponent(params.firstName);
-            }
-            
-            if (params.lastName) {
-                document.getElementById('lastName').value = decodeURIComponent(params.lastName);
-            }
-            
-            if (params.email) {
-                document.getElementById('email').value = decodeURIComponent(params.email);
-            }
-            
-            if (params.phone) {
-                document.getElementById('mobilePhone').value = params.phone;
-            }
-            
-            // Handle referral codes
-            if (params.referralCode) {
-                document.getElementById('referredBy').value = params.referralCode;
-                showReferralInfo(params.referralCode);
-            } else if (params.pathReferral) {
-                // For URLs like /register/johndoe, lookup the agent's phone number
-                lookupAgentByName(params.pathReferral);
-            }
-        }
-
-        // Show referral information
-        function showReferralInfo(referralCode) {
-            const referralInfo = document.getElementById('referralInfo');
-            const referrerName = document.getElementById('referrerName');
-            
-            // Here you would lookup the referrer's name from your database
-            // For now, showing the referral code
-            referrerName.textContent = referralCode;
-            referralInfo.style.display = 'block';
-            
-            // Disable the manual input since it's auto-populated
-            const referralInput = document.getElementById('referredBy');
-            referralInput.value = referralCode;
-            referralInput.style.backgroundColor = '#e8f5e8';
-            referralInput.readOnly = true;
-        }
-
-        // Lookup agent by name (for /register/johndoe URLs)
-        function lookupAgentByName(agentName) {
-            // This would make an API call to your Lambda function to lookup agent
-            // For now, simulating the lookup
-            console.log('Looking up agent:', agentName);
-            
-            // Simulated response - replace with actual API call
-            const mockAgentData = {
-                'johndoe': '5551234567',
-                'janedoe': '5559876543'
-            };
-            
-            const agentPhone = mockAgentData[agentName.toLowerCase()];
-            if (agentPhone) {
-                showReferralInfo(agentPhone);
-            }
-        }
-
-        // Toggle trade questions visibility
-        function toggleTradeQuestions() {
-            const checkbox = document.getElementById('inTrades');
+        // Toggle trade questions
+        document.getElementById('inTrades').addEventListener('change', function() {
             const tradeQuestions = document.getElementById('tradeQuestions');
-            const tradeTypeSelect = document.getElementById('tradeType');
-            
-            if (checkbox.checked) {
+            if (this.checked) {
                 tradeQuestions.style.display = 'block';
-                tradeTypeSelect.required = true;
             } else {
                 tradeQuestions.style.display = 'none';
-                tradeTypeSelect.required = false;
-                // Clear trade-related fields
-                document.getElementById('tradeType').value = '';
-                document.getElementById('yearsInBusiness').value = '';
-                document.getElementById('businessAddress').value = '';
             }
-        }
+        });
 
-        function toggleAgentBenefits() {
-            const checkbox = document.getElementById('agentInterest');
+        // Toggle agent benefits
+        document.getElementById('agentInterest').addEventListener('change', function() {
             const benefits = document.getElementById('agentBenefits');
-            
-            if (checkbox.checked) {
+            if (this.checked) {
                 benefits.style.display = 'block';
             } else {
                 benefits.style.display = 'none';
             }
-        }
-
-        // Phone number formatting
-        function formatPhoneNumber(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length >= 6) {
-                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
-            } else if (value.length >= 3) {
-                value = value.replace(/(\d{3})(\d{0,3})/, '$1-$2');
-            }
-            input.value = value;
-        }
-
-        // Initialize form on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            prePopulateForm();
-            
-            // Phone number formatting
-            document.getElementById('mobilePhone').addEventListener('input', function(e) {
-                formatPhoneNumber(e.target);
-            });
-
-            document.getElementById('referredBy').addEventListener('input', function(e) {
-                if (!e.target.readOnly) {
-                    formatPhoneNumber(e.target);
-                }
-            });
         });
-
-        // Form submission
-        document.getElementById('memberRegistrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Add member type based on agent interest
-            data.member_type = data.agentInterest ? 'referral_agent' : 'standard';
-            
-            // Clean phone numbers (remove dashes)
-            data.mobilePhone = data.mobilePhone.replace(/\D/g, '');
-            if (data.referredBy) {
-                data.referredBy = data.referredBy.replace(/\D/g, '');
-            }
-            
-            // Add referral tracking data
-            data.referral_source = getUrlParameters().pathReferral ? 'agent_link' : 
-                                  getUrlParameters().referralCode ? 'qr_code' : 'manual';
-            
-            console.log('Registration Data:', data);
-            
-            // Here you'll integrate with your AWS Lambda function
-            submitToAWS(data);
-        });
-
-        // AWS Lambda submission function
-        async function submitToAWS(data) {
-            try {
-                // Replace with your actual Lambda function URL
-                const response = await fetch('YOUR_LAMBDA_ENDPOINT', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (response.ok) {
-                    // Show success message and password setup reminder
-                    showPasswordSetupModal();
-                } else {
-                    throw new Error('Registration failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Registration failed. Please try again.');
-            }
-        }
-
-        // Function to show password setup modal
-        function showPasswordSetupModal() {
-            // Create modal HTML
-            const modalHTML = `
-                <div id="passwordModal" style="
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0, 0, 0, 0.5);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 1000;
-                ">
-                    <div style="
-                        background: white;
-                        padding: 40px;
-                        border-radius: 20px;
-                        max-width: 500px;
-                        width: 90%;
-                        text-align: center;
-                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-                    ">
-                        <div style="font-size: 3rem; margin-bottom: 20px;">🎉</div>
-                        <h2 style="
-                            color: #667eea;
-                            margin-bottom: 20px;
-                            font-size: 1.8rem;
-                        ">Welcome to Small Trades Evolution!</h2>
-                        
-                        <p style="
-                            color: #2c3e50;
-                            margin-bottom: 25px;
-                            font-size: 1.1rem;
-                            line-height: 1.5;
-                        ">Your registration was successful! You're now logged into your dashboard.</p>
-                        
-                        <div style="
-                            background: #fff3cd;
-                            border: 1px solid #ffeaa7;
-                            border-radius: 10px;
-                            padding: 20px;
-                            margin-bottom: 25px;
-                        ">
-                            <p style="
-                                color: #856404;
-                                font-weight: 600;
-                                margin-bottom: 10px;
-                            ">🔐 Security Notice</p>
-                            <p style="
-                                color: #856404;
-                                font-size: 0.95rem;
-                                line-height: 1.4;
-                            ">For your account security, please set up a password on your next login. You can also do this now by going to your <strong>Profile</strong> section in the dashboard.</p>
-                        </div>
-                        
-                        <button onclick="proceedToDashboard()" style="
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            color: white;
-                            border: none;
-                            padding: 15px 30px;
-                            border-radius: 10px;
-                            font-size: 1.1rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: all 0.3s ease;
-                        " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                            Continue to Dashboard
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            // Add modal to page
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-        }
-
-        // Function to proceed to dashboard
-        function proceedToDashboard() {
-            // Remove the modal
-            const modal = document.getElementById('passwordModal');
-            if (modal) {
-                modal.remove();
-            }
-            
-            // Redirect to the referral agent dashboard
-            window.location.href = 'https://gorgeous-biscochitos-840f0f.netlify.app';
-        }
     </script>
 </body>
 </html>
